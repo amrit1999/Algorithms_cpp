@@ -1,0 +1,69 @@
+/*                       DISJOINT-SET(PATH COMPRESSION & UNION BY RANK)
+
+----------------------------------------------------------------------------*/
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll parent[100005];
+
+ll find(ll a)
+{
+    if(a==parent[a])
+    {
+        return a;
+    }
+    else
+    {
+        ll result= find(parent[a]);
+        parent[a]=result;
+        return result;
+    }
+}
+
+void union_nodes( ll a, ll b,ll rank[])
+{
+    a=find(a);
+    b=find(b);
+    if(a!=b)
+    {
+        if(rank[a]<rank[b])
+        {
+            swap(a,b);
+        }
+        parent[b]=a;
+        if(rank[a]==rank[b])
+        {
+            rank[a]++;
+        }
+    }
+}
+
+int main()
+{
+    ll n;
+    cin>>n;
+    for(ll i=0;i<n;i++)
+    {
+        parent[i]=i;
+    }
+    ll rank[n];
+    memset(rank,0,sizeof(rank));
+    ll edges;
+    cin>>edges;
+    while(edges--)
+    {
+        ll a,b;
+        cin>>a>>b;
+        union_nodes(a,b,rank);
+    }
+    for(ll i=0;i<n;i++)
+    {
+        cout<<parent[i]<<" ";
+    }
+    cout<<endl;
+}
+

@@ -1,0 +1,86 @@
+/*          PRIM`S  ALGORITHM                      
+
+--------------------------------------------------------------*/
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll graph[15][15];
+ll parents[15];
+bool mst[15];
+ll ans[15];
+#define inf 10000
+
+ll assign_min(ll ind, ll v)
+{
+    
+    for(ll i=0;i<v;i++)
+    {
+        //cout<<"i="<<i<<" ind= "<<ind<<" graph[ind][i] "<<graph[ind][i]<<" "<<" ans[i]="<<ans[i]<<" ans[ind]="<<ans[ind]<<endl;
+        if(graph[ind][i]+ans[ind]<ans[i] && mst[i]==false)
+        {
+            ans[i]=ans[ind]+graph[ind][i];
+            parents[i]=ind;
+            
+        }
+    }
+    ll mi=100000;
+    ll x=-1;
+    for(ll i=0;i<v;i++)
+    {
+        if(ans[i]<mi  && mst[i]==false)
+        {
+            x=i;
+            mi=ans[i];
+        }
+    }
+    return(x);
+}
+
+void prims(ll s, ll v)
+{
+    parents[s]=-1;
+    mst[s]=true;
+    ans[s]=0;
+    ll final_ans=0;
+    ll count=1;
+    ll prev=s;
+    while(count!=v)
+    {
+        prev=assign_min(prev,v);
+        mst[prev]=true;
+        final_ans+=ans[prev]-ans[parents[prev]];
+        count++;
+    }
+    cout<<final_ans<<endl;
+}
+
+int main()
+{
+    ll v;
+    cin>>v;
+    for(ll i=0;i<v;i++)
+    {
+        ans[i]=inf;
+        for(ll j=0;j<v;j++)
+        {
+            
+            graph[i][j]=inf;
+        }
+    }
+    ll edges;
+    cin>>edges;
+    while(edges--)
+    {
+        ll a,b,w;
+        cin>>a>>b>>w;
+        graph[a][b]=w;
+        graph[b][a]=w;
+    }
+    
+    
+    
+    prims(0,v);
+}
