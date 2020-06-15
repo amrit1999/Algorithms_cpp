@@ -1,0 +1,88 @@
+/*                       KRUSKHAL'S ALGORITHM(Using disjoint set)
+
+-------------------------------------------------------------------------------*/
+
+
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll parent[100];
+vector<pair<ll,pair<ll,ll>>> p;
+
+
+ll find(ll a)
+{
+    if(a==parent[a])
+    {
+        return a;
+    }
+    else
+    {
+        ll result = find(parent[a]);
+        parent[a]=result;
+        return result;
+    }
+}
+
+void combine(ll a, ll b, ll ran[])
+{
+    a= find(a);
+    b= find(b);
+    if(ran[a]<ran[b])
+    {
+        swap(a,b);
+    }
+    parent[b]=a;
+    if(ran[a]==ran[b])
+    {
+        ran[a]++;
+    }
+}
+
+ll kruskhal(ll ran[])
+{
+    ll cost=0;
+    for(ll i=0;i<p.size();i++)
+    {
+       
+        ll w= p[i].first;
+        ll v1= p[i].second.first;
+        ll v2= p[i].second.second;
+        //cout<<"w "<<w<<" v1,v2 = "<< v1<<" "<<v2<<endl;
+        if(find(v1)!=find(v2))
+        {
+            //cout<<w<<" ";
+            combine(v1,v2,ran);
+            cost+=w;
+        }
+        
+    }
+    return(cost);
+}
+
+int main()
+{
+    
+    ll nodes,edges,weight;
+    cin>>nodes>>edges;
+    ll ran[nodes];
+    memset(ran,0,sizeof(ran));
+    for(ll i=0;i<nodes;i++)
+    {
+        parent[i]=i;
+    }
+    while(edges--)
+    {
+        ll a,b;
+        cin>>a>>b>>weight;
+        p.push_back({weight,{a,b}});
+    }
+    sort(p.begin(),p.end());
+    /*for(ll i=0;i<p.size();i++)
+    {
+        cout<<p[i].first<<" "<<p[i].second.first<<" "<<p[i].second.second<<endl;
+    }*/
+    ll ans= kruskhal(ran);
+    cout<<ans<<endl;
+    
+}
