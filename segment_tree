@@ -1,0 +1,68 @@
+/*                       MAX IN RANGE(SEGMENT TREE)
+
+-------------------------------------------------------------------------------*/
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ll seg[4*1000];
+ll arr[1000];
+
+
+void create_tree(ll ind, ll s, ll e)
+{
+    if(s==e)
+    {
+        seg[ind]=arr[s];
+        return;
+    }
+    ll mid= (s+e)/2;
+    create_tree((2*ind)+2, mid+1, e);
+    create_tree((2*ind)+1, s, mid);
+    seg[ind]= max(seg[(2*ind)+1],seg[(2*ind)+2]);
+}
+
+ll ans(ll ind, ll a, ll b, ll low, ll high)
+{
+    if(a<=low && b>=high)
+    {
+        return(seg[ind]);
+    }
+    if(a>high || b<low)
+    {
+        return INT_MIN;
+    }
+    else
+    {
+        ll mid= (low+high)/2;
+        ll fa1= ans((2*ind)+1,a,b,low,mid);
+        ll fa2= ans((2*ind)+2,a,b,mid+1,high);
+        return(max(fa1,fa2));
+    }
+}
+
+int main()
+{
+    ll n;
+    cin>>n;
+    for(ll i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+    create_tree(0,0,n-1);
+    /*for(ll i=0;i<4*n;i++)
+    {
+        cout<<seg[i]<<" ";
+    }*/
+    ll query;
+    cin>>query;
+    while(query--)
+    {
+        ll l,r;
+        cin>>l>>r;
+        cout<<ans(0,l,r,0,n-1)<<endl;
+    }
+    
+}
