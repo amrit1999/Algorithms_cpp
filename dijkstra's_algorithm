@@ -1,0 +1,58 @@
+/*          DIJKSTRA`S  ALGORITHM                      
+
+--------------------------------------------------------------*/
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+vector<pair<ll,ll>> adj[100];
+ll dis[100];
+
+void shotest_path(ll src,ll V)
+{
+    priority_queue<pair<ll,ll>,vector<pair<ll,ll>>,greater<pair<ll,ll>>> pq;
+    pq.push({0,src});
+    dis[src]=0;
+    while(!pq.empty())
+    {
+        ll u=pq.top().second;
+        pq.pop();
+        for(auto dd: adj[u])
+        {
+            ll w=dd.first;
+            ll v=dd.second;
+            if(dis[v]>dis[u]+w)
+            {
+                dis[v]=dis[u]+w;
+                pq.push({dis[v],v});
+            }
+        }
+    }
+    for(ll i=0;i<V;i++)
+    {
+        cout<<dis[i]<<" ";
+    }
+}
+
+int main()
+{
+    ll V,E;
+    cin>>V>>E;
+    for(ll i=0;i<V;i++)
+    {
+        dis[i]=100000;
+    }
+    while(E--)
+    {
+        ll a,b,w;
+        cin>>a>>b>>w;
+        adj[a].push_back({w,b});
+        adj[b].push_back({w,a});
+    }
+    
+    shotest_path(0,V);
+    
+}
