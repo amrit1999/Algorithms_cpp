@@ -1,0 +1,115 @@
+/*                       SUDOKU SOLVER(Using Backtracking)
+
+-------------------------------------------------------------------------------*/
+
+
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+# define N 9
+ll mat[N][N];
+
+bool check(ll mat[N][N],ll a, ll b, ll no)
+{
+    for(ll i=0;i<N;i++)
+    {
+        if(mat[i][b]==no || mat[a][i]==no)
+        {
+            return false;
+        }
+    }
+    ll s= sqrt(N);
+    ll cs= a - a%s;
+    ll rs= b - b%s;
+    for(ll i=0;i<s;i++)
+    {
+        for(ll j=0;j<s;j++)
+        {
+            if(mat[i+cs][j+rs]==no)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void print(ll mat[N][N])
+{
+    for(ll i=0;i<N;i++)
+    {
+        for(ll j=0;j<N;j++)
+        {
+            cout<<mat[i][j]<<" ";
+        }
+    }
+}
+
+bool solve(ll mat[N][N])
+{
+    ll flag=0;
+    ll i,j;
+    for(i=0;i<N;i++)
+    {
+        for(j=0;j<N;j++)
+        {
+            if(mat[i][j]==0)
+            {
+                flag=1;
+                break;
+            }
+        }
+        if(flag==1)
+        {
+            break;
+        }
+    }
+    //cout<<i<<" "<<j<<endl;
+    if(i==N && j==N)
+    {
+        return true;
+    }
+    for(ll no=1;no<=N;no++)
+    {
+        if(check(mat,i,j,no))
+        {
+            mat[i][j]=no;
+            if(solve(mat))
+            {
+                return true;
+            }
+            mat[i][j]=0;
+        }
+    }
+    return false;
+}
+
+int main()
+ {
+	ll t;
+	cin>>t;
+	while(t--)
+	{
+	    memset(mat,-1,sizeof(mat));
+	    for(ll i=0;i<N;i++)
+	    {
+	        for(ll j=0;j<N;j++)
+	        {
+	            cin>>mat[i][j];
+	        }
+	    }
+	    if(solve(mat))
+	    {
+	        print(mat);
+	        cout<<endl;
+	    }
+	    else
+	    {
+	        cout<<"-1"<<endl;
+	    }
+	}
+	return 0;
+}
